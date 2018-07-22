@@ -1,0 +1,19 @@
+{
+	"name": "find-duplicates",
+	"version": "0.1.0",
+	"description": "Find duplicates within one or more given paths.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/thomasgohard/find-duplicates.git"
+	},
+	"author": "Thomas Gohard",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/thomasgohard/find-duplicates/issues"
+	},
+	"homepage": "https://github.com/thomasgohard/find-duplicates#readme"
+}
