@@ -9,19 +9,25 @@ if (process.argv.length > 2) {
 }
 
 // list all files in paths to analyse
-var files = [];
+var files = {};
 paths.forEach(function(path) {
-	FS.readdir(path, function(error, files) {
+	FS.readdir(path, function(error, listing) {
 		if (error) {
 			console.error(error.name + ': ' + error.message);
 		} else {
-			files.forEach(function(file) {
-				var filePath = path + '/' + file;
+			listing.forEach(function(entry) {
+				var filePath = path + '/' + entry;
+
 				FS.lstat(filePath, function(error, stats) {
 					if (error) {
 						console.error(error.name + ': ' + error.message);
 					} else if (stats.isFile()) {
-						files.push(filePath);
+						var fileSize = stats.size;
+
+						if (!files[fileSize]) {
+							files[fileSize] = [];
+						}
+						files[fileSize].push(filePath);
 					}
 				});
 			});
