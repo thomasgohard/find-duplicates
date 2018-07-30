@@ -1,3 +1,4 @@
+const CRYPTO = require('crypto');
 const FS = require('fs');
 
 // capture all paths to analyse
@@ -8,7 +9,7 @@ if (process.argv.length > 2) {
 	}
 }
 
-// list all files in paths to analyse
+// list all files in paths to analyse, get the file size and sha256 hash for each
 var files = {};
 paths.forEach(function(path) {
 	FS.readdir(path, function(error, listing) {
@@ -25,9 +26,26 @@ paths.forEach(function(path) {
 						var fileSize = stats.size;
 
 						if (!files[fileSize]) {
-							files[fileSize] = [];
+							files[fileSize] = {};
 						}
-						files[fileSize].push(filePath);
+
+						FS.readFile(filePath, function(error, data) {
+							if (error) {
+								console.error(error.name + ': ' + error.message);
+							} else {
+								var hash = CRYPTO.createHash('sha256');
+
+								hash.update(data);
+
+								var hashDigest = hash.digest('hex');
+
+								if (!files[fileSize][hashDigest]) {
+									files[fileSize][hashDigest] = [];
+								}
+
+								files[fileSize][hashDigest].push(filePath);
+							}
+						});
 					}
 				});
 			});
